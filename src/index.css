@@ -1,0 +1,318 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 263 70% 50%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 263 70% 96%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 263 70% 50%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 263 70% 50%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 263 70% 50%;
+
+    /* Custom scrollbar colors */
+    --scrollbar-thumb: 263 70% 50%;
+    --scrollbar-track: 263 70% 95%;
+    --scrollbar-hover: 263 70% 45%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 263 70% 60%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 263 70% 60%;
+    
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 263 70% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 263 70% 60%;
+
+    /* Custom scrollbar colors for dark mode */
+    --scrollbar-thumb: 263 70% 50%;
+    --scrollbar-track: 240 3.7% 15.9%;
+    --scrollbar-hover: 263 70% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  .sidebar-item {
+    @apply flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:bg-accent;
+  }
+
+  .sidebar-item.active {
+    @apply bg-accent text-accent-foreground font-medium;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Custom scrollbar styling */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background-color: hsl(var(--scrollbar-track));
+    border-radius: 6px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--scrollbar-thumb));
+    border-radius: 6px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--scrollbar-hover));
+  }
+  
+  /* Firefox scrollbar */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--scrollbar-thumb)) hsl(var(--scrollbar-track));
+  }
+
+  /* Sticky note color enhancements */
+  .sticky-note-yellow {
+    @apply bg-gradient-to-br from-amber-100 to-amber-200 border-amber-300;
+  }
+  
+  .sticky-note-blue {
+    @apply bg-gradient-to-br from-blue-100 to-blue-200 border-blue-300;
+  }
+  
+  .sticky-note-green {
+    @apply bg-gradient-to-br from-green-100 to-green-200 border-green-300;
+  }
+  
+  .sticky-note-red {
+    @apply bg-gradient-to-br from-red-100 to-red-200 border-red-300;
+  }
+  
+  .sticky-note-gray {
+    @apply bg-gradient-to-br from-gray-100 to-gray-200 border-gray-300;
+  }
+  
+  .sticky-note-pink {
+    @apply bg-gradient-to-br from-pink-100 to-pink-200 border-pink-300;
+  }
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out forwards;
+  }
+
+  .animate-scale {
+    animation: scale 0.3s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scale {
+    from {
+      transform: scale(0.95);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+
+  /* Mobile app-like appearance */
+  @media (max-width: 768px) {
+    .app-container {
+      @apply px-4 pb-20;
+    }
+
+    /* Add padding to bottom to account for mobile navigation */
+    main {
+      @apply mb-16 px-4;
+    }
+    
+    /* Mobile card styling */
+    .card {
+      @apply rounded-xl shadow-md border-0 overflow-hidden;
+    }
+    
+    /* Mobile-friendly buttons */
+    .mobile-btn {
+      @apply min-w-0 px-3 h-10 rounded-full;
+    }
+    
+    /* Bottom margin for content to avoid bottom nav overlap */
+    .pb-safe {
+      padding-bottom: calc(env(safe-area-inset-bottom, 16px) + 70px);
+    }
+    
+    /* Mobile optimized tables */
+    .mobile-table {
+      @apply block w-full overflow-x-auto -mx-4 px-4;
+    }
+    
+    /* Mobile optimized forms */
+    .mobile-form-grid {
+      @apply grid-cols-1 gap-4;
+    }
+    
+    /* Mobile spacing for course cards */
+    .mobile-course-card {
+      @apply p-4 mb-4;
+    }
+    
+    /* Mobile-friendly dialog/modal */
+    .mobile-dialog {
+      @apply p-4 rounded-t-2xl max-h-[90vh];
+    }
+    
+    /* Mobile friendly tabs */
+    .mobile-tabs {
+      @apply overflow-x-auto flex pb-2 mb-4 scrollbar-hide;
+    }
+    
+    /* Mobile friendly tab triggers */
+    .mobile-tab-trigger {
+      @apply flex-shrink-0 px-4;
+    }
+    
+    /* Mobile friendly course details */
+    .mobile-course-details {
+      @apply px-4 py-3;
+    }
+    
+    /* Mobile friendly tool cards */
+    .mobile-tool-card {
+      @apply p-4 rounded-xl shadow-sm;
+    }
+  }
+  
+  /* Theme transition animations */
+  .theme-transition {
+    @apply transition-all duration-300;
+  }
+  
+  .theme-fade {
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+  }
+  
+  /* Improved mobile navigation */
+  .mobile-nav {
+    @apply fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border shadow-lg;
+    height: 60px;
+  }
+  
+  .mobile-nav-item {
+    @apply flex flex-col items-center justify-center;
+    height: 100%;
+  }
+  
+  .mobile-nav-item.active {
+    @apply text-primary;
+  }
+  
+  .mobile-nav-icon {
+    @apply mb-1;
+  }
+  
+  .mobile-nav-label {
+    @apply text-xs font-medium;
+  }
+}
