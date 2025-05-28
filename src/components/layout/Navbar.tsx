@@ -167,7 +167,7 @@ const Navbar = () => {
               <Link to="/profile">Profile</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link to="/settings">Settings</Link>
+              {/* <Link to="/settings">Settings</Link> */}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem 

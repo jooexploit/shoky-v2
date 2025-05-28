@@ -101,11 +101,11 @@ const Sidebar: React.FC<SidebarProps> = ({ mainContentRef }) => {
     { path: '/news', icon: <Bell size={isMobile ? 24 : isCollapsed ? 20 : 24} />, label: 'News', activeOn: ['/news'] },
     { path: '/communities', icon: <Users size={isMobile ? 24 : isCollapsed ? 20 : 24} />, label: 'Communities', activeOn: ['/communities'] },
     { path: '/tools', icon: <Wrench size={isMobile ? 24 : isCollapsed ? 20 : 24} />, label: 'Tools', activeOn: ['/tools'] },
-    { path: '/schedule', icon: <Calendar size={isMobile ? 24 : isCollapsed ? 20 : 24} />, label: 'Schedule', activeOn: ['/schedule'] },
+    // { path: '/schedule', icon: <Calendar size={isMobile ? 24 : isCollapsed ? 20 : 24} />, label: 'Schedule', activeOn: ['/schedule'] },
     { divider: true },
     { path: '/profile', icon: <User size={isMobile ? 24 : isCollapsed ? 20 : 24} />, label: 'Profile', activeOn: ['/profile'] },
     { path: '/about', icon: <Info size={isMobile ? 24 : isCollapsed ? 20 : 24} />, label: 'About', activeOn: ['/about'] },
-    { path: '/settings', icon: <Settings size={isMobile ? 24 : isCollapsed ? 20 : 24} />, label: 'Settings', activeOn: ['/settings'] },
+    // { path: '/settings', icon: <Settings size={isMobile ? 24 : isCollapsed ? 20 : 24} />, label: 'Settings', activeOn: ['/settings'] },
   ];
 
   // Mobile trigger button

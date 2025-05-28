@@ -64,20 +64,20 @@ type TodoList = {
 
 // Color options for notes with enhanced styling classes
 const noteColors = [
-  { value: '#FEF3C7', name: 'Yellow', className: 'sticky-note-yellow' },
-  { value: '#DBEAFE', name: 'Blue', className: 'sticky-note-blue' },
-  { value: '#D1FAE5', name: 'Green', className: 'sticky-note-green' },
-  { value: '#FEE2E2', name: 'Red', className: 'sticky-note-red' },
-  { value: '#E5E7EB', name: 'Gray', className: 'sticky-note-gray' },
-  { value: '#FCE7F3', name: 'Pink', className: 'sticky-note-pink' },
+  { value: '#FEF3C7', name: 'Yellow', className: 'sticky-note-yellow', textColor: '#713F12' }, // Darker text for yellow
+  { value: '#DBEAFE', name: 'Blue', className: 'sticky-note-blue', textColor: '#1E3A8A' }, // Dark blue text
+  { value: '#D1FAE5', name: 'Green', className: 'sticky-note-green', textColor: '#14532D' }, // Dark green text
+  { value: '#FEE2E2', name: 'Red', className: 'sticky-note-red', textColor: '#7F1D1D' }, // Dark red text
+  { value: '#E5E7EB', name: 'Gray', className: 'sticky-note-gray', textColor: '#1F2937' }, // Dark gray text
+  { value: '#FCE7F3', name: 'Pink', className: 'sticky-note-pink', textColor: '#831843' }, // Dark pink text
 ];
 
 // Priority options and their colors
 const priorities = [
-  { value: 'none', label: 'None', color: '#E5E7EB' },
-  { value: 'low', label: 'Low', color: '#D1FAE5' },
-  { value: 'medium', label: 'Medium', color: '#DBEAFE' },
-  { value: 'high', label: 'High', color: '#FEE2E2' },
+  { value: 'none', label: 'None', color: '#E5E7EB', textColor: '#1F2937' }, // Gray background, dark gray text
+  { value: 'low', label: 'Low', color: '#D1FAE5', textColor: '#14532D' }, // Green background, dark green text
+  { value: 'medium', label: 'Medium', color: '#DBEAFE', textColor: '#1E3A8A' }, // Blue background, dark blue text
+  { value: 'high', label: 'High', color: '#FEE2E2', textColor: '#7F1D1D' }, // Red background, dark red text
 ];
 
 const Tools = () => {
@@ -448,8 +448,12 @@ const Tools = () => {
 
   // Get CSS class for note color
   const getNoteColorClass = (colorValue: string) => {
-    return noteColors.find(color => color.value === colorValue)?.className || '';
+  const color = noteColors.find((color) => color.value === colorValue);
+  return {
+    className: color?.className || '',
+    textColor: color?.textColor || '#000000', // Fallback to black
   };
+};
 
   return (
     <AppLayout>
@@ -536,108 +540,116 @@ const Tools = () => {
               </Card>
               
               {/* Notes List */}
-              <div className="lg:col-span-8">
-                <h3 className="text-lg font-medium mb-4">Your Notes</h3>
+<div className="lg:col-span-8">
+  <h3 className="text-lg font-medium mb-4 text-foreground">Your Notes</h3>
+  
+  {notes.length === 0 ? (
+    <div className="text-center py-12 border rounded-lg bg-background">
+      <StickyNote className="h-12 w-12 mx-auto text-muted-foreground" />
+      <p className="mt-4 text-muted-foreground">No notes yet. Create your first note!</p>
+    </div>
+  ) : (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {notes.map((note) => {
+        const { className, textColor } = getNoteColorClass(note.color);
+        return (
+          <div 
+            key={note.id} 
+            className={`rounded-lg border overflow-hidden shadow-sm ${className}`}
+            style={{ color: textColor }} // Apply dynamic text color
+          >
+            {editingNote === note.id ? (
+              // Edit mode
+              <div className="p-4 space-y-3">
+                <Input 
+                  value={editNoteData.title}
+                  onChange={(e) => setEditNoteData({...editNoteData, title: e.target.value})}
+                  className="bg-background text-foreground border-muted"
+                />
                 
-                {notes.length === 0 ? (
-                  <div className="text-center py-12 border rounded-lg">
-                    <StickyNote className="h-12 w-12 mx-auto text-muted-foreground" />
-                    <p className="mt-4 text-muted-foreground">No notes yet. Create your first note!</p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {notes.map((note) => (
-                      <div 
-                        key={note.id} 
-                        className={`rounded-lg border overflow-hidden shadow-sm ${getNoteColorClass(note.color)}`}
-                      >
-                        {editingNote === note.id ? (
-                          // Edit mode
-                          <div className="p-4 space-y-3">
-                            <Input 
-                              value={editNoteData.title}
-                              onChange={(e) => setEditNoteData({...editNoteData, title: e.target.value})}
-                              className="bg-white/70"
-                            />
-                            
-                            <Textarea 
-                              value={editNoteData.content}
-                              onChange={(e) => setEditNoteData({...editNoteData, content: e.target.value})}
-                              rows={4}
-                              className="bg-white/70"
-                            />
-                            
-                            <div className="flex flex-wrap gap-2">
-                              {noteColors.map((color) => (
-                                <button
-                                  key={color.value}
-                                  type="button"
-                                  className={`w-6 h-6 rounded-full border-2 shadow-sm transition-all ${editNoteData.color === color.value ? 'border-primary ring-2 ring-primary/20 scale-110' : 'border-transparent'}`}
-                                  style={{ backgroundColor: color.value }}
-                                  onClick={() => setEditNoteData({...editNoteData, color: color.value})}
-                                  title={color.name}
-                                />
-                              ))}
-                            </div>
-                            
-                            <div className="flex justify-end space-x-2 pt-2">
-                              <Button 
-                                size="sm" 
-                                variant="outline"
-                                onClick={() => setEditingNote(null)}
-                              >
-                                Cancel
-                              </Button>
-                              <Button 
-                                size="sm"
-                                onClick={handleSaveEditedNote}
-                              >
-                                Save
-                              </Button>
-                            </div>
-                          </div>
-                        ) : (
-                          // View mode
-                          <>
-                            <div className="p-4">
-                              <div className="flex justify-between items-start mb-2">
-                                <h3 className="font-semibold">{note.title}</h3>
-                                <div className="flex space-x-1">
-                                  <Button 
-                                    size="icon" 
-                                    variant="ghost" 
-                                    className="h-6 w-6"
-                                    onClick={() => handleEditNote(note.id)}
-                                  >
-                                    <Edit className="h-3 w-3" />
-                                  </Button>
-                                  <Button 
-                                    size="icon" 
-                                    variant="ghost" 
-                                    className="h-6 w-6"
-                                    onClick={() => handleDeleteNote(note.id)}
-                                  >
-                                    <Trash2 className="h-3 w-3" />
-                                  </Button>
-                                </div>
-                              </div>
-                              
-                              <div className="whitespace-pre-line text-sm">
-                                {note.content}
-                              </div>
-                            </div>
-                            
-                            <div className="bg-black/5 text-xs px-4 py-1.5 text-muted-foreground flex items-center">
-                              <Clock className="h-3 w-3 mr-1" />
-                              <span>Created: {formatDate(note.date)}</span>
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <Textarea 
+                  value={editNoteData.content}
+                  onChange={(e) => setEditNoteData({...editNoteData, content: e.target.value})}
+                  rows={4}
+                  className="bg-background text-foreground border-muted"
+                />
+                
+                <div className="flex flex-wrap gap-2">
+                  {noteColors.map((color) => (
+                    <button
+                      key={color.value}
+                      type="button"
+                      className={`w-6 h-6 rounded-full border-2 shadow-sm transition-all ${
+                        editNoteData.color === color.value 
+                          ? 'border-primary ring-2 ring-primary/20 scale-110' 
+                          : 'border-transparent'
+                      }`}
+                      style={{ backgroundColor: color.value }}
+                      onClick={() => setEditNoteData({...editNoteData, color: color.value})}
+                      title={color.name}
+                    />
+                  ))}
+                </div>
+                
+                <div className="flex justify-end space-x-2 pt-2">
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => setEditingNote(null)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    size="sm"
+                    onClick={handleSaveEditedNote}
+                  >
+                    Save
+                  </Button>
+                </div>
               </div>
+            ) : (
+              // View mode
+              <>
+                <div className="p-4">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="font-semibold">{note.title}</h3>
+                    <div className="flex space-x-1">
+                      <Button 
+                        size="icon" 
+                        variant="ghost" 
+                        className="h-6 w-6 hover:bg-background/50"
+                        onClick={() => handleEditNote(note.id)}
+                      >
+                        <Edit className="h-3 w-3" />
+                      </Button>
+                      <Button 
+                        size="icon" 
+                        variant="ghost" 
+                        className="h-6 w-6 hover:bg-background/50"
+                        onClick={() => handleDeleteNote(note.id)}
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <div className="whitespace-pre-line text-sm">
+                    {note.content}
+                  </div>
+                </div>
+                
+                <div className="bg-background/10 text-xs px-4 py-1.5 text-muted-foreground flex items-center">
+                  <Clock className="h-3 w-3 mr-1" />
+                  <span>Created: {formatDate(note.date)}</span>
+                </div>
+              </>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  )}
+</div>
             </div>
           </TabsContent>
           
@@ -853,18 +865,19 @@ const Tools = () => {
                                           </div>
                                         )}
                                         
-                                        {todo.priority !== 'none' && (
-                                          <Badge 
-                                            variant="outline" 
-                                            className="mr-3 text-xs"
-                                            style={{ 
-                                              backgroundColor: priorities.find(p => p.value === todo.priority)?.color,
-                                              borderColor: 'transparent'
-                                            }}
-                                          >
-                                            {priorities.find(p => p.value === todo.priority)?.label} Priority
-                                          </Badge>
-                                        )}
+                                       {todo.priority !== 'none' && (
+  <Badge
+    variant="outline"
+    className={`mr-3 text-xs priority-${todo.priority}`}
+    style={{
+      backgroundColor: priorities.find((p) => p.value === todo.priority)?.color,
+      color: priorities.find((p) => p.value === todo.priority)?.textColor,
+      borderColor: 'transparent',
+    }}
+  >
+    {priorities.find((p) => p.value === todo.priority)?.label} Priority
+  </Badge>
+)}
                                       </div>
                                     </div>
                                     

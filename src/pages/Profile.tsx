@@ -69,7 +69,7 @@ const userProfile = {
   university: 'HTI',
   major: 'Computer Science',
   graduationYear: 2027,
-  gpa: '26',
+  gpa: '2.6',
   bio: 'fullstack dev and bug hunter | non tech lead@ CyberCrew | cybersecurity co lead and backend lead@IEEE HTI | frontend dev@Brilliant Trend kSA',
   skills: ['JavaScript', 'React', 'Python', 'web pentesting', 'php','linux'],
   courses: [

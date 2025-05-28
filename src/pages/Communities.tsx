@@ -471,7 +471,7 @@ const CommunityDetailDialog = ({
             </div>
           </div>
           <Button 
-            className="absolute top-4 right-4"
+            className="absolute bottom-4 right-6 flex items-center"
             variant={community.joined ? "outline" : "default"}
             onClick={handleJoinCommunity}
           >
@@ -512,10 +512,10 @@ const CommunityDetailDialog = ({
                         <Calendar className="mr-2 h-4 w-4" />
                         <span>Founded: {new Date(community.foundedDate).toLocaleDateString()}</span>
                       </div>
-                      <div className="flex items-center text-muted-foreground">
+                      {/* <div className="flex items-center text-muted-foreground">
                         <MessageSquare className="mr-2 h-4 w-4" />
                         <span>{community.activeDiscussions} active discussions</span>
-                      </div>
+                      </div> */}
                       <div className="flex items-center text-muted-foreground">
                         <Calendar className="mr-2 h-4 w-4" />
                         <span>{community.upcomingEvents?.length || 0} upcoming events</span>
@@ -607,7 +607,7 @@ const CommunityDetailDialog = ({
                     {community.leaderboard?.map((member: any) => (
                       <div 
                         key={member.name} 
-                        className={`flex items-center justify-between p-3 rounded-lg border ${member.rank === 1 ? 'bg-amber-50 border-amber-200' : ''}`}
+                        className={`flex items-center justify-between p-3 rounded-lg border ${member.rank === 1 ? 'bg-amber-50 border-amber-200 dark:bg-primary/10 border-violet-600' : ''}`}
                       >
                         <div className="flex items-center">
                           <div className={`w-7 h-7 rounded-full flex items-center justify-center mr-3 ${
@@ -646,10 +646,10 @@ const CommunityDetailDialog = ({
         
         <DialogFooter className="p-6 border-t">
           <Button variant="outline" onClick={onClose}>Close</Button>
-          <Button>
+          {/* <Button>
             <MessageSquare className="mr-2 h-4 w-4" />
             Start Discussion
-          </Button>
+          </Button> */}
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -736,10 +736,10 @@ const Communities = () => {
         </div>
         
         <Tabs defaultValue="my-communities" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-6">
+          <TabsList className="grid w-full grid-cols-2 mb-6">
             <TabsTrigger value="my-communities">My Communities</TabsTrigger>
             <TabsTrigger value="discover">Discover</TabsTrigger>
-            <TabsTrigger value="discussions">Discussions</TabsTrigger>
+            {/* <TabsTrigger value="discussions">Discussions</TabsTrigger> */}
           </TabsList>
           
           <TabsContent value="my-communities" className="space-y-6">
@@ -813,9 +813,13 @@ const Communities = () => {
                         )}
                       </div>
                       
-                      <div className="flex items-center mt-4 text-sm">
+                      {/* <div className="flex items-center mt-4 text-sm">
                         <MessageSquare className="mr-1 h-4 w-4 text-muted-foreground" />
                         <span className="text-muted-foreground">{community.activeDiscussions} active discussions</span>
+                      </div> */}
+                      <div className="flex items-center mt-4 text-sm">
+                        <Calendar className="mr-1 h-4 w-4 text-muted-foreground" />
+                        <span>{community.upcomingEvents?.length || 0} upcoming events</span>
                       </div>
                     </CardContent>
                     

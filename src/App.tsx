@@ -28,8 +28,8 @@ const App = () => (
       <AuthProvider>
         <TooltipProvider>
           <Toaster />
-          <Sonner />
-          <BrowserRouter>
+          <Sonner />  
+          <BrowserRouter basename="/shoky-v2">
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/courses" element={<Courses />} />
@@ -38,9 +38,9 @@ const App = () => (
               <Route path="/news" element={<News />} />
               <Route path="/communities" element={<Communities />} />
               <Route path="/tools" element={<Tools />} />
-              <Route path="/schedule" element={<Schedule />} />
+              {/* <Route path="/schedule" element={<Schedule />} /> */}
               <Route path="/about" element={<About />} />
-              <Route path="/settings" element={<Settings />} />
+              {/* <Route path="/settings" element={<Settings />} /> */}
               <Route path="/profile" element={<Profile />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

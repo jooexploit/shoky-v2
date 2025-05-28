@@ -23,6 +23,8 @@ import {
 } from '@/components/ui/avatar';
 
 import * as THREE from 'three';
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 import {
@@ -41,7 +43,10 @@ import {
   Calendar,
   Award,
   ArrowRight,
-  PhoneCall
+  PhoneCall,
+  Wrench,
+  Lightbulb,
+  X
 } from 'lucide-react';
 
 // Team members data
@@ -110,11 +115,13 @@ const faqs = [
 
 // Interactive 3D Element component
 const Interactive3DElement = () => {
-  const mountRef = useRef<HTMLDivElement>(null);
+  const mountRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     if (!mountRef.current) return;
+
+    const currentMount = mountRef.current;
 
     // Set up scene
     const scene = new THREE.Scene();
@@ -122,111 +129,110 @@ const Interactive3DElement = () => {
     scene.fog = new THREE.FogExp2(0x000000, 0.002);
 
     // Set up camera
-    const camera = new THREE.PerspectiveCamera(75, mountRef.current.clientWidth / mountRef.current.clientHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(75, currentMount.clientWidth / currentMount.clientHeight, 0.1, 1000);
     camera.position.z = 30;
 
     // Set up renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
-    mountRef.current.appendChild(renderer.domElement);
+    renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
+    currentMount.appendChild(renderer.domElement);
 
     // Create controls
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.rotateSpeed = 0.5;
+    controls.minDistance = 10;
+    controls.maxDistance = 100;
 
     // Add ambient light
-    const ambientLight = new THREE.AmbientLight(0x404040, 1);
+    const ambientLight = new THREE.AmbientLight(0xaaaaaa, 0.8);
     scene.add(ambientLight);
 
-    // Add directional light
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(1, 1, 1);
+    // Add directional lights
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    directionalLight.position.set(5, 5, 5);
     scene.add(directionalLight);
+    const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
+    directionalLight2.position.set(-5, -5, -5);
+    scene.add(directionalLight2);
 
-    // Create a particle system representing a network/constellation
+    // Particle system
     const particleCount = 500;
-    const particles = new THREE.BufferGeometry();
+    const particlesGeometry = new THREE.BufferGeometry();
     const positions = [];
-    const colors = [];
-    const color = new THREE.Color();
+    const colors = []; // Store initial colors for animation reference
+    const tempColor = new THREE.Color(); // Use a temporary color object
 
-    // Define vibrant colors for the particles
-    const particleColors = [
-      '#8B5CF6', // Shoky primary
-      '#EC4899', // Pink
-      '#10B981', // Green
-      '#F59E0B', // Orange
-      '#3B82F6', // Blue
+    const particleColorsPalette = [ // Renamed for clarity
+      '#8B5CF6', '#EC4899', '#10B981', '#F59E0B', '#3B82F6',
     ];
 
     for (let i = 0; i < particleCount; i++) {
-      // Position particles in a sphere
-      const radius = 15 + Math.random() * 10;
+      const radius = 20 + Math.random() * 15;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.random() * Math.PI;
       
-      const x = radius * Math.sin(phi) * Math.cos(theta);
-      const y = radius * Math.sin(phi) * Math.sin(theta);
-      const z = radius * Math.cos(phi);
+      positions.push(
+        radius * Math.sin(phi) * Math.cos(theta),
+        radius * Math.sin(phi) * Math.sin(theta),
+        radius * Math.cos(phi)
+      );
       
-      positions.push(x, y, z);
-      
-      // Random color from our palette
-      const randomColor = particleColors[Math.floor(Math.random() * particleColors.length)];
-      color.set(randomColor);
-      colors.push(color.r, color.g, color.b);
+      const randomHexColor = particleColorsPalette[Math.floor(Math.random() * particleColorsPalette.length)];
+      tempColor.set(randomHexColor);
+      colors.push(tempColor.r, tempColor.g, tempColor.b); // Store initial RGB values
     }
     
-    particles.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-    particles.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    particlesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    // Set initial colors, these will be copied to the attribute that gets updated
+    particlesGeometry.setAttribute('color', new THREE.Float32BufferAttribute([...colors], 3)); 
     
-    // Material for particles
     const particleMaterial = new THREE.PointsMaterial({
       size: 0.5,
       vertexColors: true,
       transparent: true,
       opacity: 0.8,
+      sizeAttenuation: true,
     });
     
-    const particleSystem = new THREE.Points(particles, particleMaterial);
+    const particleSystem = new THREE.Points(particlesGeometry, particleMaterial);
     scene.add(particleSystem);
 
-    // Create lines connecting some particles (representing connections)
+    // Lines connecting particles
     const linesMaterial = new THREE.LineBasicMaterial({
       color: 0x8B5CF6,
       transparent: true,
-      opacity: 0.3,
+      opacity: 0.2,
       blending: THREE.AdditiveBlending,
     });
 
     const linesGeometry = new THREE.BufferGeometry();
     const linePositions = [];
-    
-    // Connect some particles with lines
-    for (let i = 0; i < particleCount; i += 8) {
+    const particlePositionsArray = particlesGeometry.attributes.position.array; // Use the array directly
+
+    for (let i = 0; i < particleCount; i += 10) {
       if (i + 1 < particleCount) {
-        // Get positions of two particles
-        const p1x = positions[i * 3];
-        const p1y = positions[i * 3 + 1];
-        const p1z = positions[i * 3 + 2];
+        const p1x = particlePositionsArray[i * 3];
+        const p1y = particlePositionsArray[i * 3 + 1];
+        const p1z = particlePositionsArray[i * 3 + 2];
         
-        const p2x = positions[(i + 1) * 3];
-        const p2y = positions[(i + 1) * 3 + 1];
-        const p2z = positions[(i + 1) * 3 + 2];
-        
-        // Calculate distance between particles
-        const dist = Math.sqrt(
-          Math.pow(p2x - p1x, 2) + 
-          Math.pow(p2y - p1y, 2) + 
-          Math.pow(p2z - p1z, 2)
-        );
-        
-        // Only connect if they're close enough
-        if (dist < 10) {
-          linePositions.push(p1x, p1y, p1z);
-          linePositions.push(p2x, p2y, p2z);
+        for (let j = 1; j < 4; j++) {
+            if (i + j < particleCount) {
+                const p2x = particlePositionsArray[(i + j) * 3];
+                const p2y = particlePositionsArray[(i + j) * 3 + 1];
+                const p2z = particlePositionsArray[(i + j) * 3 + 2];
+                
+                const dist = Math.sqrt(
+                  Math.pow(p2x - p1x, 2) + 
+                  Math.pow(p2y - p1y, 2) + 
+                  Math.pow(p2z - p1z, 2)
+                );
+                
+                if (dist < 15) {
+                  linePositions.push(p1x, p1y, p1z, p2x, p2y, p2z);
+                }
+            }
         }
       }
     }
@@ -235,69 +241,92 @@ const Interactive3DElement = () => {
     const lines = new THREE.LineSegments(linesGeometry, linesMaterial);
     scene.add(lines);
 
-    // Create a central sphere representing the core system
-    const sphereGeometry = new THREE.SphereGeometry(3, 32, 32);
-    const sphereMaterial = new THREE.MeshPhongMaterial({
-      color: 0x8B5CF6,
-      emissive: 0x8B5CF6,
-      emissiveIntensity: 0.3,
-      transparent: true,
-      opacity: 0.8,
-    });
-    const centralSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-    scene.add(centralSphere);
+    // --- Create 3D Text "Team Shoky" ---
+    let textMesh;
+    const fontLoader = new FontLoader(); // This should now work
+    fontLoader.load(
+      'https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', // Ensure this path is correct (from public folder)
+      (font) => {
+            console.log("Font loaded successfully!"); // <--- ADD THIS
+        const textGeometry = new TextGeometry('Team Shoky', {
+          font: font,
+          size: 4,
+          height: 0.5,
+          curveSegments: 12,
+          bevelEnabled: true,
+          bevelThickness: 0.1,
+          bevelSize: 0.1,
+          bevelOffset: 0,
+          bevelSegments: 5
+        });
 
-    // Add a text label for the "Shoky Helper"
-    const labelDiv = document.createElement('div');
-    labelDiv.className = 'absolute text-center p-2 rounded-md';
-    labelDiv.style.color = 'white';
-    labelDiv.style.backgroundColor = 'rgba(0,0,0,0.5)';
-    labelDiv.style.backdropFilter = 'blur(4px)';
-    labelDiv.style.fontSize = '1.2rem';
-    labelDiv.style.fontWeight = 'bold';
-    labelDiv.textContent = 'Team Shoky';
-    labelDiv.style.pointerEvents = 'none';
-    mountRef.current.appendChild(labelDiv);
+        textGeometry.computeBoundingBox();
+        if (textGeometry.boundingBox) {
+            const textOffsetX = -0.5 * (textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x);
+            textGeometry.translate(textOffsetX, 0, 0);
+        }
 
-    // Animation function
-    let frame = 0;
+
+        const textMaterial = new THREE.MeshPhongMaterial({
+          color: 0x8B5CF6,
+          emissive: 0x5A3E9E,
+          emissiveIntensity: 0.6,
+          specular: 0xffffff,
+          shininess: 50,
+          flatShading: false,
+        });
+        
+        textMesh = new THREE.Mesh(textGeometry, textMaterial);
+        scene.add(textMesh);
+      },
+      undefined,
+      (error) => {
+          console.error('Font loading error:', error);
+      }
+    );
+
+    // Animation
+    const clock = new THREE.Clock();
+    let animationFrameId;
+
     const animate = () => {
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
+      if (!mountRef.current) return; 
+
+      const elapsedTime = clock.getElapsedTime();
       
-      frame += 0.002;
+      particleSystem.rotation.y = elapsedTime * 0.05;
+      lines.rotation.y = elapsedTime * 0.05;
       
-      // Rotate particle system slowly
-      particleSystem.rotation.y = frame * 0.2;
-      lines.rotation.y = frame * 0.2;
-      
-      // Pulse central sphere size
-      const pulseScale = 1 + Math.sin(frame * 3) * 0.05;
-      centralSphere.scale.set(pulseScale, pulseScale, pulseScale);
-      
-      // Rotate scene based on interaction
-      if (isHovered) {
-        scene.rotation.y += 0.003;
-        particleSystem.material.size = 0.7;
-      } else {
-        scene.rotation.y += 0.001;
-        particleSystem.material.size = 0.5;
+      if (textMesh) {
+        const pulseScale = 1 + Math.sin(elapsedTime * 2) * 0.05;
+        textMesh.scale.set(pulseScale, pulseScale, pulseScale);
+        textMesh.rotation.y = Math.sin(elapsedTime * 0.3) * 0.2; // Gentle sway
       }
       
-      // Update particle colors over time
-      const colors = particleSystem.geometry.attributes.color.array;
+      if (isHovered) {
+        scene.rotation.y += (0.002 - scene.rotation.y) * 0.05; // Smooth to target
+        particleMaterial.size = 0.6;
+        particleMaterial.opacity = 0.9;
+      } else {
+        scene.rotation.y += (0.0005 - scene.rotation.y) * 0.05; // Smooth to target
+        particleMaterial.size = 0.5;
+        particleMaterial.opacity = 0.8;
+      }
+      
+      const particleColorsAttribute = particlesGeometry.attributes.color;
       for (let i = 0; i < particleCount; i++) {
         const i3 = i * 3;
-        colors[i3] = (colors[i3] + 0.0003) % 1;
-        colors[i3 + 1] = (colors[i3 + 1] + 0.0005) % 1;
+        // Use the initially stored `colors` array for the base color
+        tempColor.setRGB(colors[i3], colors[i3+1], colors[i3+2]);
+        const hueShift = Math.sin(elapsedTime * 0.2 + i * 0.01) * 0.05;
+        tempColor.offsetHSL(hueShift, 0, 0);
+
+        particleColorsAttribute.array[i3] = tempColor.r;
+        particleColorsAttribute.array[i3 + 1] = tempColor.g;
+        particleColorsAttribute.array[i3 + 2] = tempColor.b;
       }
-      particleSystem.geometry.attributes.color.needsUpdate = true;
-      
-      // Position the label to follow the central sphere
-      const vector = new THREE.Vector3(0, 0, 0);
-      vector.project(camera);
-      const x = (vector.x * 0.5 + 0.5) * mountRef.current.clientWidth;
-      const y = (vector.y * -0.5 + 0.5) * mountRef.current.clientHeight;
-      labelDiv.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px)`;
+      particleColorsAttribute.needsUpdate = true;
       
       controls.update();
       renderer.render(scene, camera);
@@ -307,38 +336,49 @@ const Interactive3DElement = () => {
 
     // Handle resize
     const handleResize = () => {
-      if (!mountRef.current) return;
-      
-      camera.aspect = mountRef.current.clientWidth / mountRef.current.clientHeight;
+      if (!currentMount) return;
+      camera.aspect = currentMount.clientWidth / currentMount.clientHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
+      renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
     };
-
     window.addEventListener('resize', handleResize);
 
-    // Clean up on unmount
+    // Clean up
     return () => {
+      cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
-      if (mountRef.current) {
-        mountRef.current.removeChild(renderer.domElement);
-        if (labelDiv.parentNode === mountRef.current) {
-          mountRef.current.removeChild(labelDiv);
+      if (currentMount && renderer.domElement.parentNode === currentMount) {
+        currentMount.removeChild(renderer.domElement);
+      }
+      renderer.dispose();
+      scene.traverse(object => {
+        if (object.geometry) object.geometry.dispose();
+        if (object.material) {
+          if (Array.isArray(object.material)) {
+            object.material.forEach(material => material.dispose());
+          } else {
+            object.material.dispose();
+          }
         }
+      });
+      // Clear the scene explicitly
+      while(scene.children.length > 0){ 
+          scene.remove(scene.children[0]); 
       }
     };
-  }, []);
+  }, []); // Removed isHovered from dependency array as its logic is handled inside animate
 
   return (
     <div 
       ref={mountRef} 
-      className="w-full h-[400px] md:h-[500px] relative rounded-xl overflow-hidden border border-primary/30 shadow-lg"
+      className="w-full h-[400px] md:h-[500px] relative rounded-xl overflow-hidden border border-primary/30 shadow-lg cursor-grab"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onMouseDown={(e) => (e.currentTarget.style.cursor = 'grabbing')}
+      onMouseUp={(e) => (e.currentTarget.style.cursor = 'grab')}
     />
   );
 };
-
-
 const About = () => {
   return (
     <AppLayout>
@@ -440,10 +480,11 @@ const About = () => {
                 icon: <BookOpen className="h-8 w-8 text-primary" />
               },
               {
-                title: "Schedule Generator",
-                description: "Create optimized class schedules that work with your preferences and requirements.",
-                icon: <Calendar className="h-8 w-8 text-primary" />
-              },
+  title: "Student Tools Hub",
+  description: "Access essential tools like a To-Do List, Sticky Notes, GPA Calculator, and curated resources to boost your productivity.",
+  icon: <Wrench className="h-8 w-8 text-primary" />
+}
+
             ].map((feature, index) => (
               <Card key={index} className="overflow-hidden">
                 <CardHeader className="pb-2">

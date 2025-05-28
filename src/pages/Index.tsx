@@ -79,7 +79,7 @@ const Index = () => {
         {/* Right column */}
         <div className="space-y-6">
           <UpcomingAssignments />
-          <CommunityHighlights />
+          {/* <CommunityHighlights /> */}
         </div>
       </div>
     </AppLayout>

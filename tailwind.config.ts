@@ -20,6 +20,16 @@ export default {
 		},
 		extend: {
 			colors: {
+				'sticky-note-yellow': '#FEF3C7',
+        'sticky-note-blue': '#DBEAFE',
+        'sticky-note-green': '#D1FAE5',
+        'sticky-note-red': '#FEE2E2',
+        'sticky-note-gray': '#E5E7EB',
+        'sticky-note-pink': '#FCE7F3',
+		'priority-none': '#E5E7EB',
+        'priority-low': '#D1FAE5',
+        'priority-medium': '#DBEAFE',
+        'priority-high': '#FEE2E2',
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',

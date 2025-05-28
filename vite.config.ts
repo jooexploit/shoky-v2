@@ -9,6 +9,7 @@ export default defineConfig(({ mode }) => ({
     host: true,
     port: 8080,
   },
+  base: '/shoky-v2/', 
   plugins: [
     react(),
     mode === 'development' &&
