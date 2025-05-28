@@ -721,10 +721,10 @@ const CourseDetails = () => {
         
         {/* Tabs for different course sections */}
         <Tabs defaultValue="content" className="w-full" value={currentTab} onValueChange={setCurrentTab}>
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="content">Content</TabsTrigger>
             <TabsTrigger value="assignments">Assignments</TabsTrigger>
-            <TabsTrigger value="discussions">Discussions</TabsTrigger>
+            {/* <TabsTrigger value="discussions">Discussions</TabsTrigger> */}
             <TabsTrigger value="people">People</TabsTrigger>
           </TabsList>
           
@@ -950,9 +950,9 @@ const CourseDetails = () => {
                         </div>
                       </div>
                     </CardHeader>
-                    <CardFooter className="pt-0 flex justify-between">
-                      <Button variant="ghost" size="sm">View Profile</Button>
-                      <Button variant="outline" size="sm">Message</Button>
+                    <CardFooter className="pt-0 flex justify-end">
+                      {/* <Button variant="ghost" size="sm"></Button> */}
+                      <Button variant="outline" size="sm">View Profile</Button>
                     </CardFooter>
                   </Card>
                 ))}
