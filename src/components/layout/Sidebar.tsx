@@ -92,16 +92,44 @@ const Sidebar: React.FC<SidebarProps> = ({ mainContentRef }) => {
     setIsCollapsed(newState);
     localStorage.setItem('sidebarCollapsed', String(newState));
   };
+const LearningLogIcon = ({ size = 24 }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 122.88 88.08"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="currentColor"
+  >
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M83.1,33.02l-0.3-11.21l-18.42,5.32c-1.66,0.36-3.29,0.54-4.9,0.54
+        c-1.72,0.01-3.41-0.18-5.08-0.54l-17.6-5.38v11.37c0.5,5.9,17.44,7.71,22.64,7.96c4.17,0.2,20.63-1.97,22.79-5.37
+        C82.7,34.97,82.99,34.07,83.1,33.02z M2.54,83.01h12.59c-0.93-0.24-1.63-1.1-1.63-2.1v-55.7c0-1.19,0.98-2.17,2.17-2.17h9.72
+        c-0.31,1.11-0.49,2.24-0.51,3.4h-7.66v53.85h88.19V26.44h-7.43c-0.02-1.16-0.19-2.29-0.5-3.4h9.17c1.19,0,2.17,0.98,2.17,2.17V80.9
+        c0,1.01-0.69,1.86-1.63,2.1h13.16c1.4,0,2.54,1.14,2.54,2.54s-1.14,2.54-2.54,2.54H2.54c-1.4,0-2.54-1.14-2.54-2.54
+        S1.14,83.01,2.54,83.01z M27.14,70.69c-0.81,0-1.47-0.66-1.47-1.47s0.66-1.47,1.47-1.47h57.38c0.81,0,1.47,0.66,1.47,1.47
+        s-0.66,1.47-1.47,1.47H27.14z M27.14,61.92c-0.81,0-1.47-0.66-1.47-1.47s0.66-1.47,1.47-1.47h43.93c0.81,0,1.47,0.66,1.47,1.47
+        s-0.66,1.47-1.47,1.47H27.14z M27.14,53.15c-0.81,0-1.47-0.66-1.47-1.47s0.66-1.47,1.47-1.47h57.84c0.81,0,1.47,0.66,1.47,1.47
+        s-0.66,1.47-1.47,1.47H27.14z M57.87,83.96h7.14c0.67,0,1.22,0.55,1.22,1.22s-0.55,1.22-1.22,1.22h-7.14
+        c-0.67,0-1.22-0.55-1.22-1.22S57.2,83.96,57.87,83.96z M90.57,13.74v13.7H91c0.29,0,0.54,0.24,0.54,0.54v3.68
+        c0,0.29-0.24,0.54-0.54,0.54h-0.44v1.29c0.55,0.1,0.97,0.59,0.97,1.17s-0.54,1.19-1.19,1.19h-2.13c-0.65,0-1.19-0.53-1.19-1.19
+        s0.42-1.06,0.97-1.17v-1.29h-0.43c-0.29,0-0.54-0.24-0.54-0.54v-3.68c0-0.3,0.24-0.54,0.54-0.54H88v-12.9l-22.42,6.97
+        c-4.06,0.97-8.12,1.03-12.18,0l-24.74-7.39l-2.24-0.67c-2.79-1.14-2.09-3.81,0.5-4.43l27.99-8.36c2.89-0.82,5.77-0.95,8.66,0
+        l27.48,8.26c2.99,0.73,3.58,3.49,0.1,4.63L90.57,13.74z"
+    />
+  </svg>
+);
 
   // Main navigation links
   const navItems = [
-    { path: '/', icon: <Home size={isMobile ? 24 : isCollapsed ? 20 : 24} />, label: 'Dashboard', activeOn: ['/', '/dashboard'] },
+    { path: '/', icon: <Home size={isMobile ? 24 : isCollapsed ? 20 : 24} />, label: 'Dashboard', activeOn: ['/dashboard'] },
     { path: '/courses', icon: <BookOpen size={isMobile ? 24 : isCollapsed ? 20 : 24} />, label: 'Courses', activeOn: ['/courses'] },
-    { path: '/exams', icon: <Calendar size={isMobile ? 24 : isCollapsed ? 20 : 24} />, label: 'Exams', activeOn: ['/exams'] },
+    { path: '/Learning_Log', icon: <LearningLogIcon size={isMobile ? 24 : isCollapsed ? 20 : 24} />, label: 'Learning Log', activeOn: ['/Learning_Log'] },
     { path: '/news', icon: <Bell size={isMobile ? 24 : isCollapsed ? 20 : 24} />, label: 'News', activeOn: ['/news'] },
     { path: '/communities', icon: <Users size={isMobile ? 24 : isCollapsed ? 20 : 24} />, label: 'Communities', activeOn: ['/communities'] },
     { path: '/tools', icon: <Wrench size={isMobile ? 24 : isCollapsed ? 20 : 24} />, label: 'Tools', activeOn: ['/tools'] },
-    // { path: '/schedule', icon: <Calendar size={isMobile ? 24 : isCollapsed ? 20 : 24} />, label: 'Schedule', activeOn: ['/schedule'] },
+    { path: '/schedule', icon: <Calendar size={isMobile ? 24 : isCollapsed ? 20 : 24} />, label: 'Schedule', activeOn: ['/schedule'] },
     { divider: true },
     { path: '/profile', icon: <User size={isMobile ? 24 : isCollapsed ? 20 : 24} />, label: 'Profile', activeOn: ['/profile'] },
     { path: '/about', icon: <Info size={isMobile ? 24 : isCollapsed ? 20 : 24} />, label: 'About', activeOn: ['/about'] },
@@ -206,7 +234,7 @@ const Sidebar: React.FC<SidebarProps> = ({ mainContentRef }) => {
           {!isCollapsed && (
             <Link to="/" className="flex items-center space-x-2">
               <div className="rounded-full  h-8 w-8 flex items-center justify-center">
-                <span className="font-bold text-white"><img src="/src/assets/icon.png" alt="" /></span>
+                <span className="font-bold text-white"><img src="https://raw.githubusercontent.com/jooexploit/landingpage-v2/refs/heads/main/public/icon.png" alt="" /></span>
               </div>
               <span className="font-semibold">Team Shoky Helper</span>
             </Link>

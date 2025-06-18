@@ -23,7 +23,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookOpen, CalendarDays, Clock, Plus, Search } from 'lucide-react';
+import { DoorOpen , CalendarDays, Clock, Plus, Search } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -528,12 +528,12 @@ const Courses = () => {
                       <span>{course.schedule}</span>
                     </div>
                     <div className="flex items-center text-sm text-muted-foreground">
-                      <BookOpen className="mr-1 h-4 w-4" />
+                      <DoorOpen  className="mr-1 h-4 w-4" />
                       <span>{course.room}</span>
                     </div>
                   </div>
                   
-                  <div className="mt-4">
+                  {/* <div className="mt-4">
                     <div className="flex justify-between items-center text-sm mb-1">
                       <span>Course Progress</span>
                       <span className="font-medium">{course.progress}%</span>
@@ -547,7 +547,7 @@ const Courses = () => {
                         }}
                       ></div>
                     </div>
-                  </div>
+                  </div> */}
                 </CardContent>
                 <CardFooter className="border-t p-4 flex justify-between">
                   <div className="flex items-center text-sm">

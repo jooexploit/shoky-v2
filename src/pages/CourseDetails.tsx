@@ -39,7 +39,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
-import { Calendar, CalendarDays, BookOpen, Clock, FileText, FileVideo, BookCopy, FileImage, Download, Link as LinkIcon, ArrowLeft, Users, CheckCircle2, CircleDashed, MessageSquare } from 'lucide-react';
+import { Calendar, CalendarDays, DoorOpen , Clock, FileText, FileVideo, BookCopy, FileImage, Download, Link as LinkIcon, ArrowLeft, Users, CheckCircle2, CircleDashed, MessageSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 
@@ -627,7 +627,7 @@ const CourseDetails = () => {
         </div>
         
         {/* Course info cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Instructor card */}
           <Card>
             <CardHeader className="pb-2">
@@ -660,7 +660,7 @@ const CourseDetails = () => {
                   <span>{course.schedule}</span>
                 </div>
                 <div className="flex items-center text-sm">
-                  <BookOpen className="mr-2 h-4 w-4 text-muted-foreground" />
+                  <DoorOpen  className="mr-2 h-4 w-4 text-muted-foreground" />
                   <span>{course.room}</span>
                 </div>
               </div>
@@ -668,7 +668,7 @@ const CourseDetails = () => {
           </Card>
           
           {/* Progress card */}
-          <Card>
+          {/* <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-base">Course Progress</CardTitle>
             </CardHeader>
@@ -706,7 +706,7 @@ const CourseDetails = () => {
                 </div>
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
         
         {/* Course description */}
